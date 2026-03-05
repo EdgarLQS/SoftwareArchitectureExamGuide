@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir D:\\\\PersonalData\\\\workForLQS\\\\20250627 软考架构师\\\\系统架构设计师\\\\3、真题及解析（2009 年 -2025 年）:*)",
+      "Bash(dir D:\\\\PersonalData\\\\workForLQS\\\\20250627 软考架构师\\\\系统架构设计师\\\\5、论文（真题范文 + 写作）:*)",
+      "Bash(dir D:\\\\PersonalData\\\\workForLQS\\\\20250627 软考架构师\\\\系统架构设计师\\\\2、教材（官方最新 2023 年第 2 版教材 + 其他教辅资料）:*)",
+      "Bash(dir:*)",
+      "Bash(do echo:*)"
+    ]
+  }
+}
