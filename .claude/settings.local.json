@@ -5,7 +5,25 @@
       "Bash(dir D:\\\\PersonalData\\\\workForLQS\\\\20250627 软考架构师\\\\系统架构设计师\\\\5、论文（真题范文 + 写作）:*)",
       "Bash(dir D:\\\\PersonalData\\\\workForLQS\\\\20250627 软考架构师\\\\系统架构设计师\\\\2、教材（官方最新 2023 年第 2 版教材 + 其他教辅资料）:*)",
       "Bash(dir:*)",
-      "Bash(do echo:*)"
+      "Bash(do echo:*)",
+      "Bash(python:*)",
+      "Bash(pdftotext:*)",
+      "Bash(cmd:*)",
+      "Bash(pdf2txt.py:*)",
+      "Bash(powershell:*)",
+      "WebFetch(domain:)",
+      "Bash(python3:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(xargs:*)",
+      "Bash(pwsh:*)",
+      "Bash(wsl bash:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(more:*)",
+      "Bash(findstr:*)",
+      "WebSearch",
+      "WebFetch(domain:www.educity.cn)",
+      "Bash(ls:*)",
+      "Bash(pdfinfo:*)"
     ]
   }
 }
