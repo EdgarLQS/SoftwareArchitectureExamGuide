@@ -17,6 +17,18 @@ FRONTMATTER_EXEMPT = {
     "00-项目管理/README.md",
 }
 
+CASE_VERIFICATION_PATHS = (
+    "03-案例专题/000-历年真题/2019年11月-核验说明.md",
+    "03-案例专题/000-历年真题/2020年11月-核验说明.md",
+    "03-案例专题/000-历年真题/2021年11月-核验说明.md",
+    "03-案例专题/000-历年真题/2022年11月-核验说明.md",
+    "03-案例专题/000-历年真题/2023年11月-核验说明.md",
+    "03-案例专题/000-历年真题/2024年5月-核验说明.md",
+    "03-案例专题/000-历年真题/2024年11月-核验说明.md",
+    "03-案例专题/000-历年真题/2025年5月-核验说明.md",
+    "03-案例专题/000-历年真题/2025年11月-核验说明.md",
+)
+
 EXTERNAL_SCHEMES = {
     "http",
     "https",
@@ -136,6 +148,33 @@ def validate_topic_directories(errors: list[str]) -> None:
             error(errors, topic.relative_to(ROOT).as_posix(), "missing current 02- writing framework")
 
 
+def validate_case_verification_notes(errors: list[str], manifest_paths: set[Path]) -> None:
+    for rel_text in CASE_VERIFICATION_PATHS:
+        relative = Path(rel_text)
+        full = ROOT / relative
+        if relative not in manifest_paths:
+            error(errors, rel_text, "yearly verification note missing from current manifest")
+        if not full.is_file():
+            error(errors, rel_text, "missing yearly verification note")
+            continue
+
+        try:
+            metadata = parse_frontmatter(full.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError) as exc:
+            error(errors, rel_text, f"cannot read verification note: {exc}")
+            continue
+
+        if metadata is None:
+            error(errors, rel_text, "missing or malformed YAML frontmatter")
+            continue
+        if metadata.get("type") != "verification-note":
+            error(errors, rel_text, "type must be verification-note")
+        if metadata.get("record_type") != "personal_practice":
+            error(errors, rel_text, "record_type must be personal_practice")
+        if not metadata.get("question_completeness"):
+            error(errors, rel_text, "missing question_completeness")
+
+
 def main() -> int:
     if not MANIFEST.is_file():
         print(f"ERROR: missing manifest: {MANIFEST}", file=sys.stderr)
@@ -144,8 +183,9 @@ def main() -> int:
     errors: list[str] = []
     ids: dict[str, str] = {}
     paths = read_manifest()
+    manifest_paths = set(paths)
 
-    if len(paths) != len(set(paths)):
+    if len(paths) != len(manifest_paths):
         error(errors, MANIFEST.relative_to(ROOT).as_posix(), "duplicate path in manifest")
 
     for relative in paths:
@@ -227,6 +267,7 @@ def main() -> int:
                 error(errors, rel, f"broken relative link {raw_link!r} -> {display}")
 
     validate_topic_directories(errors)
+    validate_case_verification_notes(errors, manifest_paths)
 
     for item in errors:
         print(item)
