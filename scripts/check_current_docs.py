@@ -195,7 +195,7 @@ def validate_current_essay_samples(errors: list[str], manifest_paths: set[Path])
         relative = Path(rel_text)
         full = ROOT / relative
         parts = relative.parts
-        topic = parts[2] if len(parts) > 2 else rel_text
+        topic = parts[1] if len(parts) > 2 else rel_text
         topic_prefix = topic[:4]
 
         if topic_prefix in seen_topics:
