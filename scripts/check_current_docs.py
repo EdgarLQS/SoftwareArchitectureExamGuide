@@ -29,6 +29,20 @@ CASE_VERIFICATION_PATHS = (
     "03-案例专题/000-历年真题/2025年11月-核验说明.md",
 )
 
+CURRENT_ESSAY_SAMPLE_PATHS = (
+    "02-论文专题/0001-软件架构风格/04-软件架构风格论文范文-改写版.md",
+    "02-论文专题/0002-多元异构数据集成/04-多元异构数据集成论文范文-2026H2.md",
+    "02-论文专题/0003-测试/03-系统性能测试论文范文-2026H2.md",
+    "02-论文专题/0004-微服务/03-微服务论文范文-改写版.md",
+    "02-论文专题/0005-云原生/03-云原生论文范文-2026H2.md",
+    "02-论文专题/0006-ABSD 基于软件架构设计/03-ABSD 论文范文-改写版.md",
+    "02-论文专题/0007-系统安全架构设计/03-系统安全架构设计论文范文-改写版.md",
+    "02-论文专题/0008-软件维护/03-软件维护论文范文-2026H2.md",
+    "02-论文专题/0009-SOA/03-SOA论文范文-2026H2.md",
+    "02-论文专题/0010-大数据架构/03-大数据架构论文范文-改写版.md",
+    "02-论文专题/0011-性能优化/03-高并发系统设计论文范文-2026H2.md",
+)
+
 EXTERNAL_SCHEMES = {
     "http",
     "https",
@@ -175,6 +189,53 @@ def validate_case_verification_notes(errors: list[str], manifest_paths: set[Path
             error(errors, rel_text, "missing question_completeness")
 
 
+def validate_current_essay_samples(errors: list[str], manifest_paths: set[Path]) -> None:
+    seen_topics: set[str] = set()
+    for rel_text in CURRENT_ESSAY_SAMPLE_PATHS:
+        relative = Path(rel_text)
+        full = ROOT / relative
+        parts = relative.parts
+        topic = parts[2] if len(parts) > 2 else rel_text
+        topic_prefix = topic[:4]
+
+        if topic_prefix in seen_topics:
+            error(errors, rel_text, f"multiple current essay samples configured for topic {topic_prefix}")
+        seen_topics.add(topic_prefix)
+
+        if relative not in manifest_paths:
+            error(errors, rel_text, "current essay sample missing from current manifest")
+        if not full.is_file():
+            error(errors, rel_text, "missing current essay sample")
+            continue
+
+        try:
+            metadata = parse_frontmatter(full.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError) as exc:
+            error(errors, rel_text, f"cannot read current essay sample: {exc}")
+            continue
+
+        if metadata is None:
+            error(errors, rel_text, "missing or malformed YAML frontmatter")
+            continue
+        if metadata.get("type") != "essay-sample":
+            error(errors, rel_text, "type must be essay-sample")
+        if metadata.get("status") in {"deprecated", "archived"}:
+            error(errors, rel_text, "current essay sample cannot be deprecated or archived")
+        if metadata.get("applicable_exam") != "2026-H2":
+            error(errors, rel_text, "current essay sample must declare applicable_exam: 2026-H2")
+        if metadata.get("scenario_data") != "simulated":
+            error(errors, rel_text, "current essay sample must declare scenario_data: simulated")
+
+    expected_topics = {f"{number:04d}" for number in range(1, 12)}
+    if seen_topics != expected_topics:
+        missing = sorted(expected_topics - seen_topics)
+        extra = sorted(seen_topics - expected_topics)
+        if missing:
+            error(errors, "02-论文专题", f"missing current essay sample configuration for: {', '.join(missing)}")
+        if extra:
+            error(errors, "02-论文专题", f"unexpected current essay sample topics: {', '.join(extra)}")
+
+
 def main() -> int:
     if not MANIFEST.is_file():
         print(f"ERROR: missing manifest: {MANIFEST}", file=sys.stderr)
@@ -268,6 +329,7 @@ def main() -> int:
 
     validate_topic_directories(errors)
     validate_case_verification_notes(errors, manifest_paths)
+    validate_current_essay_samples(errors, manifest_paths)
 
     for item in errors:
         print(item)
