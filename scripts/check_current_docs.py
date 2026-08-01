@@ -62,6 +62,14 @@ CURRENT_KNOWLEDGE_FILES = {
         "status": "reviewed",
         "applicable_exam": "2026-H2",
     },
+    "03-案例专题/01-架构风格与模式.md": {
+        "type": "knowledge-guide",
+        "status": "reviewed",
+        "applicable_exam": "2026-H2",
+        "scenario_data": "not_applicable",
+        "last_verified_at": "required",
+        "source_level_contains": "official",
+    },
 }
 
 EXTERNAL_SCHEMES = {
