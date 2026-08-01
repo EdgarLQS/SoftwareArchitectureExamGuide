@@ -1,0 +1,30 @@
+name: Historical case verification quality
+
+on:
+  push:
+    branches:
+      - main
+      - agent/fix-documentation-consistency
+    paths:
+      - "03-案例专题/000-历年真题/**"
+      - "scripts/check_case_verification_work.py"
+      - ".github/workflows/case-verification-quality.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate historical case verification work
+        run: python scripts/check_case_verification_work.py
