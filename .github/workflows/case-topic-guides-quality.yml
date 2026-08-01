@@ -1,0 +1,30 @@
+name: Case topic guides quality
+
+on:
+  push:
+    branches:
+      - main
+      - agent/fix-documentation-consistency
+    paths:
+      - "03-案例专题/**"
+      - "scripts/check_case_topic_guides.py"
+      - ".github/workflows/case-topic-guides-quality.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate current case topic guides
+        run: python scripts/check_case_topic_guides.py
