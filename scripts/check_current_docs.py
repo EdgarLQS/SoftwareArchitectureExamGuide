@@ -43,6 +43,27 @@ CURRENT_ESSAY_SAMPLE_PATHS = (
     "02-论文专题/0011-性能优化/03-高并发系统设计论文范文-2026H2.md",
 )
 
+CURRENT_KNOWLEDGE_FILES = {
+    "01-知识点/README.md": {
+        "type": "navigation",
+        "status": "reviewed",
+        "applicable_exam": "2026-H2",
+    },
+    "01-知识点/03-Redis 专题-2026H2.md": {
+        "type": "knowledge-guide",
+        "status": "reviewed",
+        "applicable_exam": "2026-H2",
+        "scenario_data": "not_applicable",
+        "last_verified_at": "required",
+        "source_level_contains": "official",
+    },
+    "01-知识点/03-Redis 专题-核验说明.md": {
+        "type": "verification-note",
+        "status": "reviewed",
+        "applicable_exam": "2026-H2",
+    },
+}
+
 EXTERNAL_SCHEMES = {
     "http",
     "https",
@@ -85,6 +106,7 @@ def read_manifest() -> list[Path]:
 
 
 def parse_frontmatter(text: str) -> dict[str, str] | None:
+    """Parse the small YAML subset used by current docs, including simple lists."""
     lines = text.splitlines()
     if not lines or lines[0].strip() != "---":
         return None
@@ -98,13 +120,27 @@ def parse_frontmatter(text: str) -> dict[str, str] | None:
         return None
 
     metadata: dict[str, str] = {}
+    list_key: str | None = None
     for line in lines[1:end]:
-        if not line or line[0].isspace() or line.lstrip().startswith("-"):
-            continue
         match = re.match(r"^([A-Za-z0-9_-]+):\s*(.*)$", line)
         if match:
+            key = match.group(1)
             value = match.group(2).strip().strip("\"'")
-            metadata[match.group(1)] = value
+            metadata[key] = value
+            list_key = key if value == "" else None
+            continue
+
+        stripped = line.strip()
+        if list_key and stripped.startswith("-"):
+            item = stripped[1:].strip().strip("\"'")
+            if item:
+                previous = metadata.get(list_key, "")
+                metadata[list_key] = f"{previous},{item}".strip(",")
+            continue
+
+        if stripped and not line[0].isspace():
+            list_key = None
+
     return metadata
 
 
@@ -144,6 +180,21 @@ def local_target(raw: str) -> str | None:
     return unquote(parsed.path) or None
 
 
+def load_metadata(errors: list[str], rel_text: str) -> dict[str, str] | None:
+    full = ROOT / rel_text
+    if not full.is_file():
+        error(errors, rel_text, "file does not exist")
+        return None
+    try:
+        metadata = parse_frontmatter(full.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError) as exc:
+        error(errors, rel_text, f"cannot read UTF-8 text: {exc}")
+        return None
+    if metadata is None:
+        error(errors, rel_text, "missing or malformed YAML frontmatter")
+    return metadata
+
+
 def validate_topic_directories(errors: list[str]) -> None:
     essay_root = ROOT / "02-论文专题"
     for number in range(1, 12):
@@ -165,21 +216,11 @@ def validate_topic_directories(errors: list[str]) -> None:
 def validate_case_verification_notes(errors: list[str], manifest_paths: set[Path]) -> None:
     for rel_text in CASE_VERIFICATION_PATHS:
         relative = Path(rel_text)
-        full = ROOT / relative
         if relative not in manifest_paths:
             error(errors, rel_text, "yearly verification note missing from current manifest")
-        if not full.is_file():
-            error(errors, rel_text, "missing yearly verification note")
-            continue
 
-        try:
-            metadata = parse_frontmatter(full.read_text(encoding="utf-8"))
-        except (OSError, UnicodeError) as exc:
-            error(errors, rel_text, f"cannot read verification note: {exc}")
-            continue
-
+        metadata = load_metadata(errors, rel_text)
         if metadata is None:
-            error(errors, rel_text, "missing or malformed YAML frontmatter")
             continue
         if metadata.get("type") != "verification-note":
             error(errors, rel_text, "type must be verification-note")
@@ -193,9 +234,7 @@ def validate_current_essay_samples(errors: list[str], manifest_paths: set[Path])
     seen_topics: set[str] = set()
     for rel_text in CURRENT_ESSAY_SAMPLE_PATHS:
         relative = Path(rel_text)
-        full = ROOT / relative
-        parts = relative.parts
-        topic = parts[1] if len(parts) > 2 else rel_text
+        topic = relative.parts[1] if len(relative.parts) > 2 else rel_text
         topic_prefix = topic[:4]
 
         if topic_prefix in seen_topics:
@@ -204,18 +243,9 @@ def validate_current_essay_samples(errors: list[str], manifest_paths: set[Path])
 
         if relative not in manifest_paths:
             error(errors, rel_text, "current essay sample missing from current manifest")
-        if not full.is_file():
-            error(errors, rel_text, "missing current essay sample")
-            continue
 
-        try:
-            metadata = parse_frontmatter(full.read_text(encoding="utf-8"))
-        except (OSError, UnicodeError) as exc:
-            error(errors, rel_text, f"cannot read current essay sample: {exc}")
-            continue
-
+        metadata = load_metadata(errors, rel_text)
         if metadata is None:
-            error(errors, rel_text, "missing or malformed YAML frontmatter")
             continue
         if metadata.get("type") != "essay-sample":
             error(errors, rel_text, "type must be essay-sample")
@@ -234,6 +264,33 @@ def validate_current_essay_samples(errors: list[str], manifest_paths: set[Path])
             error(errors, "02-论文专题", f"missing current essay sample configuration for: {', '.join(missing)}")
         if extra:
             error(errors, "02-论文专题", f"unexpected current essay sample topics: {', '.join(extra)}")
+
+
+def validate_current_knowledge(errors: list[str], manifest_paths: set[Path]) -> None:
+    for rel_text, rules in CURRENT_KNOWLEDGE_FILES.items():
+        relative = Path(rel_text)
+        if relative not in manifest_paths:
+            error(errors, rel_text, "current knowledge file missing from current manifest")
+
+        metadata = load_metadata(errors, rel_text)
+        if metadata is None:
+            continue
+
+        for key in ("type", "status", "applicable_exam", "scenario_data"):
+            expected = rules.get(key)
+            if expected is not None and metadata.get(key) != expected:
+                error(errors, rel_text, f"{key} must be {expected!r}")
+
+        if rules.get("last_verified_at") == "required" and not metadata.get("last_verified_at"):
+            error(errors, rel_text, "missing last_verified_at")
+
+        required_source = rules.get("source_level_contains")
+        if required_source:
+            source_items = {
+                item.strip() for item in metadata.get("source_level", "").split(",") if item.strip()
+            }
+            if required_source not in source_items:
+                error(errors, rel_text, f"source_level must include {required_source!r}")
 
 
 def main() -> int:
@@ -286,7 +343,7 @@ def main() -> int:
                     error(errors, rel, f"{doc_type} must declare scenario_data: simulated")
 
             if metadata.get("status") not in {"deprecated", "archived"}:
-                if rel.startswith(("02-论文专题/", "03-案例专题/")):
+                if rel.startswith(("01-知识点/", "02-论文专题/", "03-案例专题/")):
                     if not metadata.get("applicable_exam"):
                         error(errors, rel, "current topic file missing applicable_exam")
 
@@ -330,6 +387,7 @@ def main() -> int:
     validate_topic_directories(errors)
     validate_case_verification_notes(errors, manifest_paths)
     validate_current_essay_samples(errors, manifest_paths)
+    validate_current_knowledge(errors, manifest_paths)
 
     for item in errors:
         print(item)
