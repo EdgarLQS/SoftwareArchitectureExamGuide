@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第 6 课：图数据库与异步 I/O</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><main>
+  <div class="eyebrow">Lesson 06 · 90—120 分钟</div><h1>为什么常用图数据库？爬虫为什么用异步？</h1>
+  <p class="lead">把“数据关系复杂”和“I/O 等待多”分别对应到架构选择上。</p>
+  <h2>图数据库选型</h2><p>当实体很多、关系复杂、查询经常沿关系走多跳时，节点—关系—属性模型更直观，路径查询也更自然。它不是在所有场景都替代关系数据库。</p>
+  <h2>爬虫四组件</h2><pre>URL 调度器 → 网页下载器 → 内容解析器 → 数据存储器
+       └──────── URL 去重 / 重试 / 限速 ────────┘</pre>
+  <h2>异步 I/O</h2><p>发起网络请求后不阻塞等待，先调度其他请求，等结果到达后再处理。它适合 I/O 密集型场景，但会增加异常、超时和资源控制复杂度。</p>
+  <h2>主动练习</h2><p>用三句话回答：医院知识图谱为什么适合图数据库？网页下载为什么适合异步 I/O？各写一个风险。</p>
+  <details><summary>查看参考答案</summary><p>医药实体和关系复杂，需要多跳关系查询；网页下载主要等待网络响应，异步可以减少等待并提高并发；风险可写图查询失控、数据质量不一致、请求过多触发限流、超时重试导致资源耗尽等。</p></details>
+  <p>下一课：<a href="0007-reasoning-and-quality.html">推理与质量</a>。详细资料：<a href="../04-图数据库、爬虫与异步 I/O.md">图数据库、爬虫与异步 I/O</a> · <a href="../reference/knowledge-graph-glossary.html">术语表</a>。</p>
+  <p>主要资料：<a href="https://neo4j.com/docs/cypher-manual/current/introduction/cypher-overview/">Neo4j Cypher Overview</a>。</p>
+</main></body></html>

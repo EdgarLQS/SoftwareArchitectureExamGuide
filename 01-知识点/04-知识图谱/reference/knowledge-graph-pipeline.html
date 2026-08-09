@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>知识图谱构建流程图</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><main><div class="eyebrow">Reference · Pipeline</div><h1>知识图谱构建流程图</h1><p class="lead">先看全流程，再回到课程理解每个阶段。</p><pre>数据源
+  ↓
+数据采集 → 数据清洗 → 知识抽取
+                         ├─ NER
+                         ├─ 关系抽取
+                         └─ 属性抽取
+                                  ↓
+知识表示 → 知识融合 → 知识存储 → 知识应用
+                                  ├─ 检索
+                                  ├─ 问题分类
+                                  ├─ 模板匹配
+                                  └─ 模板翻译</pre><div class="exam"><strong>填空顺序：</strong>清洗 → 抽取 → NER/关系抽取 → 表示 → 检索/问题分类/模板匹配/模板翻译。</div><p><a href="../02-知识图谱构建流程.md">查看详细解释</a> · <a href="../README.md">返回专题入口</a></p></main></body></html>

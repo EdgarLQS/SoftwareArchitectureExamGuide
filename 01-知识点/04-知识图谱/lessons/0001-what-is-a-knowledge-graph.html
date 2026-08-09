@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第 1 课：知识图谱是什么</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body><main>
+  <div class="eyebrow">Lesson 01 · 60—90 分钟</div>
+  <h1>知识图谱是什么？</h1>
+  <p class="lead">今天只完成一个目标：能看懂“对象—关系—对象”这张图。</p>
+  <div class="win"><strong>本课胜利：</strong>你能用一句自己的话解释知识图谱，并写出三条三元组。</div>
+
+  <h2>先不记术语</h2>
+  <p>通讯录里有联系人，地图里有地点和道路，医院里有药品、疾病、医生和科室。知识图谱做的事情，就是把这些对象和它们之间的关系组织成一张可以查询的网。</p>
+  <pre>阿司匹林 ──治疗──&gt; 头痛
+阿司匹林 ──剂型──&gt; 片剂
+头痛 ──属于──&gt; 症状</pre>
+  <p>对象是<strong>实体</strong>，连接是<strong>关系</strong>，对象的特征是<strong>属性</strong>。一条“主体—谓词—客体”就是<strong>三元组</strong>。</p>
+
+  <h2>主动练习</h2>
+  <p>从“北京协和医院位于北京，能够治疗肺炎”中写出至少三条三元组，并标出主体、谓词、客体。</p>
+  <details><summary>查看参考答案</summary><p><code>(北京协和医院, 位于, 北京)</code>、<code>(北京协和医院, 治疗, 肺炎)</code>。第三条可以写类型事实，例如 <code>(肺炎, 类型, 疾病)</code>，但要说明这是根据句意补充的分类信息。</p></details>
+
+  <h2>考试连接</h2>
+  <p>案例题通常不会只问定义，而会把实体、关系和属性放进医疗、金融或推荐场景中。答题时先找对象，再找对象间的联系，最后找对象自身的特征。</p>
+  <div class="exam"><strong>记忆句：</strong>知识图谱不是“很多网页放在一起”，而是把信息组织成可查询、可关联、可推理的结构化知识网络。</div>
+  <p>下一课：<a href="0002-triples-and-graph.html">三元组如何变成一张图</a>。复习资料：<a href="../01-核心知识体系.md">核心知识体系</a> · <a href="../reference/knowledge-graph-glossary.html">术语表</a>。</p>
+  <p>主要资料：<a href="https://www.w3.org/TR/rdf11-primer/">W3C RDF 1.1 Primer</a>。</p>
+  <p class="footer">如果哪一个词仍然模糊，先记下来，继续问老师，不要靠猜测硬背。</p>
+</main></body></html>

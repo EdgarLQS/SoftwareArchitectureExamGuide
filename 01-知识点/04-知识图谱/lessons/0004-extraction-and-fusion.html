@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第 4 课：抽取与融合</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><main>
+  <div class="eyebrow">Lesson 04 · 90 分钟</div><h1>抽取、对齐、消歧：把脏知识变可靠</h1>
+  <p class="lead">知识图谱最怕的不是没有数据，而是把错误数据连成了看似正确的网络。</p>
+  <h2>抽取三件套</h2>
+  <pre>NER：北京协和医院 / 肺炎
+关系抽取：(协和医院, 治疗, 肺炎)
+属性抽取：(协和医院, 医院等级, 三级甲等)</pre>
+  <h2>融合三问</h2>
+  <ol><li><strong>实体对齐：</strong>“北京协和医院”和“PUMCH”是不是同一实体？</li><li><strong>实体消歧：</strong>“苹果”说的是水果还是公司？</li><li><strong>冲突处理：</strong>两个来源给出不同价格，依据什么决定？</li></ol>
+  <h2>主动练习</h2><p>“协和医院”“北京协和医院”“PUMCH”分别来自三个来源。你会用哪些证据判断是否对齐？</p>
+  <details><summary>查看参考答案</summary><p>可综合名称、地址、统一编码、联系方式、来源可信度、上下文和人工审核；不能只凭名称相似直接合并。</p></details>
+  <div class="warning"><strong>边界：</strong>实体对齐是同一性判断，实体消歧是同名多义判断；两者有关，但不是同一个动作。</div>
+  <p>下一课：<a href="0005-rdf-owl-property-graph.html">RDF、OWL 与属性图</a>。复习资料：<a href="../02-知识图谱构建流程.md">构建流程</a> · <a href="../reference/knowledge-graph-glossary.html">术语表</a>。</p>
+  <p>主要资料：<a href="https://www.w3.org/TR/rdf-concepts/all/">W3C RDF Concepts</a>。</p>
+</main></body></html>

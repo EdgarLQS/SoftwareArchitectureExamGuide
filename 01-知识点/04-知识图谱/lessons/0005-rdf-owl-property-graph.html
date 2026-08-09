@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第 5 课：RDF、OWL 与属性图</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><main>
+  <div class="eyebrow">Lesson 05 · 90—120 分钟</div><h1>三种语言：表达、定义、查询</h1>
+  <p class="lead">不要把 RDF、OWL、SPARQL、Cypher 记成一串缩写，先分清它们各自解决什么问题。</p>
+  <table><tr><th>概念</th><th>它主要解决什么问题</th></tr><tr><td>RDF</td><td>如何用主体—谓词—客体表达事实</td></tr><tr><td>OWL</td><td>如何定义本体、类、属性和语义约束</td></tr><tr><td>SPARQL</td><td>如何查询 RDF 图</td></tr><tr><td>属性图</td><td>如何用节点、关系、属性组织应用数据</td></tr><tr><td>Cypher</td><td>如何查询属性图的节点、关系和路径</td></tr></table>
+  <h2>主动练习</h2><p>判断下面两句分别更像哪种语言/模型的表达：<code>(Drug, TREATS, Disease)</code>；<code>MATCH (d:Drug)-[:TREATS]-&gt;(x) RETURN x</code>。</p>
+  <details><summary>查看参考答案</summary><p>第一句是三元组/RDF 风格的事实表达；第二句是 Cypher 查询属性图。</p></details>
+  <div class="exam"><strong>考试记忆：</strong>RDF 是图数据模型，OWL 是本体语言，SPARQL 是 RDF 查询语言，Cypher 是 Neo4j 常用的属性图查询语言。</div>
+  <p>下一课：<a href="0006-graph-database-and-async-io.html">图数据库、爬虫与异步 I/O</a>。参考：<a href="../03-知识表示、推理与查询.md">知识表示、推理与查询</a> · <a href="../reference/knowledge-graph-cheatsheet.html">速查卡</a>。</p>
+  <p>主要资料：<a href="https://www.w3.org/TR/owl-overview/">W3C OWL 2 Overview</a> · <a href="https://www.w3.org/TR/sparql11-query/">W3C SPARQL 1.1 Query</a>。</p>
+</main></body></html>

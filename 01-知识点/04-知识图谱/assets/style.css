@@ -1,0 +1,89 @@
+:root {
+  --ink: #243447;
+  --muted: #687789;
+  --paper: #fffdf8;
+  --blue: #2f6f9f;
+  --blue-soft: #eaf3f8;
+  --gold: #d59b28;
+  --line: #d9e1e8;
+  --shadow: 0 12px 32px rgba(36, 52, 71, .08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #eef2f4;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.75;
+}
+
+main {
+  max-width: 880px;
+  margin: 32px auto;
+  padding: 42px 54px 56px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.eyebrow {
+  color: var(--blue);
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+h1, h2, h3 { line-height: 1.3; }
+h1 { margin-top: 8px; font-size: 2.3rem; }
+h2 { margin-top: 2rem; padding-bottom: .35rem; border-bottom: 1px solid var(--line); }
+
+.lead {
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.win, .exam, .warning {
+  margin: 1.3rem 0;
+  padding: 1rem 1.2rem;
+  border-left: 4px solid var(--blue);
+  background: var(--blue-soft);
+}
+
+.exam { border-left-color: var(--gold); background: #fff8e7; }
+.warning { border-left-color: #a85454; background: #fff1f1; }
+
+code, pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #f3f7fa;
+  background: #243447;
+}
+
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+th, td { padding: .55rem .65rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+th { color: var(--blue); background: #f6fafc; }
+
+details {
+  margin: 1rem 0;
+  padding: .8rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+summary { cursor: pointer; font-weight: 700; color: var(--blue); }
+a { color: var(--blue); }
+.footer { margin-top: 2.5rem; color: var(--muted); font-size: .9rem; }
+
+@media (max-width: 680px) {
+  main { margin: 0; padding: 28px 22px 42px; }
+  h1 { font-size: 1.8rem; }
+  table { display: block; overflow-x: auto; }
+}
