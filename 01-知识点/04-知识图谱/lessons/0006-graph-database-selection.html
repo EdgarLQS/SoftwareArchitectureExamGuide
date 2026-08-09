@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第 6 课：图数据库与存储选型</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><main>
+  <div class="eyebrow">Lesson 06 · 90—120 分钟</div><h1>为什么常用图数据库？</h1>
+  <p class="lead">把“关系复杂、需要多跳查询”对应到存储和查询架构选择上。</p>
+  <h2>图数据库选型</h2><p>当实体很多、关系复杂、查询经常沿关系走多跳时，节点—关系—属性模型更直观，路径查询也更自然。它不是在所有场景都替代关系数据库。</p>
+  <h2>主动练习</h2><p>用三句话回答：医院知识图谱为什么适合图数据库？RDF 三元组库什么时候更合适？各写一个工程风险。</p>
+  <details><summary>查看参考答案</summary><p>医药实体和关系复杂，需要多跳关系查询；强调 W3C 语义标准和 OWL 本体推理时可考虑 RDF 三元组库；风险可写图查询失控、数据质量不一致、规模增长后的分片与运维成本等。</p></details>
+  <p>下一课：<a href="0007-reasoning-and-quality.html">推理与质量</a>。详细资料：<a href="../04-图数据库与存储选型.md">图数据库与存储选型</a> · <a href="../reference/knowledge-graph-glossary.html">术语表</a>。</p>
+  <p>主要资料：<a href="https://neo4j.com/docs/cypher-manual/current/introduction/cypher-overview/">Neo4j Cypher Overview</a>。</p>
+</main></body></html>
